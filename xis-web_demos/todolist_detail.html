@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+
+<html>
+	<head>
+		<title>João Seixas</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+		<script type="text/javascript" src="../assets/js/jquery.min.js">
+		</script>
+		<script type="text/javascript" src="todolist.js">
+		</script>
+	</head>
+	<body>
+		<div id="page_wrapper">
+			<div id="header" class="jumbotron">
+				<h1>Todo-List: Detail!</h1>
+				<h2>Handmade</h2>
+			</div>
+			
+			<div id="todo_list">
+				<div class="container">
+					<h6>NEW TODO:</h6>
+					<form role="form">
+				    <div class="form-group">
+				      <label for="name">Nome:</label>
+				      <input type="text" class="form-control" id="name" placeholder="Escrever nome da Nota">
+				    </div>
+				    <div class="form-group">
+				      <label for="content">Conteúdo:</label>
+				      <input type="text" class="form-control" id="content" placeholder="Escrever conteúdo da Nota">
+				    </div>
+				  </form>
+				  <div id="buttons">
+					<div id="create_edit">
+						<a href="todolist_index.html" id="btn_create_todo" class="btn btn-default">Guardar</a>
+						<a id="btn_erase_todo" class="btn btn-default btn-danger">Apagar</a>
+						<a href="todolist_index.html" id="btn_edit_todo" class="btn btn-default">Cancelar</a>
+				  	</div>
+				  </div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
