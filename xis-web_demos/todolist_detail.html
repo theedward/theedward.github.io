@@ -8,19 +8,21 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 		<script type="text/javascript" src="../assets/js/jquery.min.js">
 		</script>
-		<script type="text/javascript" src="todolist.js">
+		<script type="text/javascript" src="todolist_detail.js">
 		</script>
 	</head>
 	<body>
 		<div id="page_wrapper">
 			<div id="header" class="jumbotron">
-				<h1>Todo-List: Detail!</h1>
-				<h2>Handmade</h2>
+				<div class="container">
+					<h1>Todo-List: Detail!</h1>
+					<h2>Handmade</h2>
+				</div>
 			</div>
 			
 			<div id="todo_list">
 				<div class="container">
-					<h6>NEW TODO:</h6>
+					<h6>TODO:</h6>
 					<form role="form">
 				    <div class="form-group">
 				      <label for="name">Nome:</label>
@@ -34,12 +36,18 @@
 				  <div id="buttons">
 					<div id="create_edit">
 						<a href="todolist_index.html" id="btn_create_todo" class="btn btn-default">Guardar</a>
-						<a id="btn_erase_todo" class="btn btn-default btn-danger">Apagar</a>
-						<a href="todolist_index.html" id="btn_edit_todo" class="btn btn-default">Cancelar</a>
+						<a href="todolist_index.html" id="btn_delete_todo" class="btn btn-default btn-danger">Apagar</a>
+						<a href="todolist_index.html" id="btn_cancel" class="btn btn-default">Cancelar</a>
 				  	</div>
 				  </div>
 				</div>
 			</div>
 		</div>
+		<br />
+		<footer class="footer">
+	      <div class="container">
+	        <p class="text-muted">Developed by João Seixas.</p>
+	      </div>
+	    </footer>
 	</body>
 </html>
