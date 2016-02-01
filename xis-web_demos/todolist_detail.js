@@ -1,6 +1,5 @@
 $(function() {
 	var todolist = {}
-	todolist.init = {}
 	todolist.db = {}
 	
 	// Holding database instance inside a global variable
@@ -40,8 +39,6 @@ $(function() {
 		{
 			$('#btn_delete_todo').hide();
 		}
-		
-		
 	}
 	
 	//Function that reads the query string. Should be used like: var param = $.QueryString["param"]; returns the param value;
