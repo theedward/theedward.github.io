@@ -1,10 +1,10 @@
 import * as THREE from './vendor/three.module.mjs';
 export const LETTERS=[...'JOÃO SEIXAS'];
 export function angleAt(seconds,index){
-  const t=(seconds%38)-9-index*.23;
-  if(t<=0||t>=2.5)return 0;
-  const u=t/2.5;
-  return 2*Math.PI*(u*u*(3-2*u));
+  const t=(seconds%38)-9-index*.10;
+  if(t<=0||t>=.65)return 0;
+  const u=t/.65;
+  return 2*Math.PI*(u*u*u*(u*(u*6-15)+10));
 }
 export function makeLetter(font,letter){
   // The accented glyph supplies both contours, so Ã and its tilde share one mesh.
