@@ -1177,3 +1177,174 @@ nav .icon {
     margin-top: 7px;
   }
 }
+
+/* High-fidelity layered-art edition. All overlay coordinates use the same 3:2 stage. */
+body { background: #0b1022; }
+header { max-width: 1536px; padding: 28px 4%; }
+main { max-width: 1536px; padding: 0; }
+.room-section { margin-top: 0; }
+.scene { aspect-ratio: 3 / 2; border: 0; background: #111730; }
+.scene canvas { width: 100%; height: 100%; position: static; image-rendering: auto; }
+.room-bottom, .project-index { margin-left: 4%; margin-right: 4%; }
+footer { max-width: 1536px; padding-left: 4%; padding-right: 4%; }
+.cases { left: 55%; top: 18%; width: 24%; height: 16%; gap: 6%; align-items: stretch; }
+.shelf-label { left: 55%; top: 14.5%; font-size: 10px; color: #dfb9ff; }
+.monitor { left: 48.7%; top: 35.5%; width: 19%; height: 20%; }
+.headphones { left: 39%; top: 37%; width: 7%; height: 10%; }
+.cat { left: 62%; top: 78%; width: 13%; height: 13%; }
+.room-caption { left: 4%; bottom: 4%; }
+@media (min-width: 900px) {
+  body { position: relative; }
+  header { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 100%; z-index: 2; align-items: flex-start; padding-top: 38px; pointer-events: none; }
+  header a, header button { pointer-events: auto; }
+  .intro h1 { font-size: clamp(21px, 3.5vw, 48px); text-shadow: 0 3px #080d23; }
+  .intro p { font-size: clamp(12px, 1.3vw, 18px); color: #e8d7f1; text-shadow: 0 2px #080d23; margin-top: 14px; letter-spacing: 2px; }
+  .intro h1 > span { display: none; }
+  nav { padding-top: 8px; gap: 12px; }
+  nav a, nav button { padding: 13px 17px; border: 1px solid #7c68b4; border-radius: 7px; background: #141632bf; font-size: 13px; }
+  nav a:first-child { background: #9870ec; border-color: #a785f7; color: #14102b; }
+}
+@media (max-width: 700px) {
+  main { padding: 0; }
+  header { padding: 20px; }
+  .scene { margin: 0; aspect-ratio: 3 / 2; }
+  .scene canvas { width: 100%; height: 100%; left: auto; position: static; }
+  .cases { left: 55%; top: 18%; width: 25%; height: 17%; gap: 5%; }
+  .game-case { min-height: 44px; }
+  .shelf-label { left: 55%; top: 12%; font-size: 5px; letter-spacing: .5px; }
+  .monitor { left: 48.7%; top: 35.5%; width: 19%; height: 20%; min-height: 44px; }
+  .headphones { left: calc(42.5% - 22px); top: calc(42% - 22px); width: 44px; height: 44px; }
+  .cat { left: calc(68.5% - 25px); top: calc(84.5% - 22px); width: 50px; height: 44px; }
+  .room-caption { font-size: 5px; padding: 5px 7px; }
+  .room-bottom, .project-index { margin-left: 20px; margin-right: 20px; }
+  nav a:first-child, nav button { display: inline-flex; }
+}
+.headphones { left: 43%; top: 41%; width: 6%; height: 10%; }
+@media (max-width: 700px) {
+  .headphones { left: calc(46% - 22px); top: calc(46% - 22px); width: 44px; height: 44px; }
+}
+.cases { left: 55.2%; top: 19.5%; width: 23%; height: 14.1%; gap: 7%; }
+.game-case:nth-child(2) { margin-top: 6px; }
+.game-case:nth-child(3) { margin-top: 12px; }
+.shelf-label { top: 15.5%; }
+@media (max-width: 700px) {
+  .cases { left: 55.2%; top: 19.5%; width: 23%; height: 14.1%; }
+  .game-case:nth-child(2) { margin-top: 2px; }
+  .game-case:nth-child(3) { margin-top: 4px; }
+}
+.cat { left: 65.4%; top: 83.5%; width: 13.7%; height: 13.7%; }
+@media (max-width: 700px) {
+  .cat { left: calc(72.25% - 25px); top: calc(90.3% - 22px); width: 50px; height: 44px; }
+}
+.scene-status { position: absolute; z-index: 3; left: 50%; top: 50%; transform: translate(-50%, -50%); color: #f5ddbd; background: #11162be8; padding: 13px 18px; font: 12px monospace; border-radius: 6px; text-align: center; }
+.scene-status:empty { display: none; }
+.scene.is-loading .cases { visibility: hidden; }
+.raster-case { background: transparent; border: 0; box-shadow: none; padding: 0; border-radius: 0; }
+.raster-case .spine { display: none; }
+.raster-case .case-art { position: static; display: block; width: 100%; height: 100%; padding: 0; background: none; border: 0; overflow: visible; }
+.raster-case .case-art img { width: 100%; height: 100%; object-fit: contain; display: block; filter: drop-shadow(2px 4px 3px #05071b80); }
+.raster-case small { opacity: 0; position: absolute; left: 50%; top: 100%; width: max-content; max-width: 180px; transform: translateX(-50%); padding: 5px 8px; background: #16132bee; transition: opacity .2s; }
+.raster-case:hover small, .raster-case:focus-visible small { opacity: 1; }
+.case-inside .case-art img { width: 100%; height: 100%; object-fit: contain; }
+.cat { left: 25.7%; top: 78.6%; width: 12.4%; height: 12.4%; }
+@media (max-width: 700px) {
+  .cat { left: calc(31.9% - 25px); top: calc(84.8% - 22px); width: 50px; height: 44px; }
+}
+/* Isometric assembly draft: no unapproved decorative assets or idle motion. */
+header { position: static; transform: none; width: auto; align-items: center; padding: 25px 4%; }
+.intro h1 { font-size: 20px; }
+.intro p { font-size: 12px; margin-top: 8px; }
+nav { padding-top: 0; }
+.scene { background: #0b1022; aspect-ratio: 3 / 2; }
+.scene .cases,.scene .shelf-label,.scene .hotspot,.room-caption { display: none; }
+.room-bottom>p { font-size: 11px; }
+
+#motion span { font-size: 0; }
+#motion span::after { content: 'Motion paused'; font-size: 11px; }
+@media(max-width:700px){header{position:static;transform:none;width:auto;align-items:flex-start;flex-wrap:wrap;}nav{width:100%;justify-content:space-between;margin:0;gap:8px;}nav a,nav button{padding:8px 0;border:0;background:none;font-size:11px;}.intro h1{font-size:16px;}.intro p{font-size:10px;} }
+#motion { display: none; } /* No idle tracks are approved in this assembly draft yet. */
+
+/* Transparent, keyboard-accessible HTML targets over the approved Pixi case sprites. */
+.scene .cases { display:block; position:absolute; inset:0; width:100%; height:100%; pointer-events:none; perspective:none; }
+.scene .cases .game-case { position:absolute; pointer-events:auto; width:4.7%; height:10%; min-height:0; margin:0; padding:0; background:transparent; border:0; box-shadow:none; transform:none; filter:none; overflow:visible; border-radius:3px; }
+.scene .game-case:nth-child(1) { left:58.2%; top:13.1%; }
+.scene .game-case:nth-child(2) { left:64.1%; top:17.5%; }
+.scene .game-case:nth-child(3) { left:69.9%; top:21.9%; }
+.scene .game-case .case-art,.scene .game-case .spine { visibility:hidden; }
+.scene .game-case small { display:none; }
+.scene .game-case:hover,.scene .game-case:focus-visible { outline:2px solid #f6d4a0; outline-offset:3px; background:#fff1; }
+#project-visual .case-art img { width:100%; height:100%; object-fit:contain; }
+/* Preserve calibrated non-overlapping artwork targets; the list supplies large touch targets. */
+.scene .cases .game-case { min-width:0; }
+
+/* Passive motion controls remain visible and accurately labelled. */
+#motion { display: inline-flex; }
+#motion span { font-size: 11px; }
+#motion span::after { content: none; }
+/* A top-layer, exact-shelf cover transition; semantic HTML remains the destination. */
+#project-dialog[open], #project-dialog .case-inside {animation:none}
+#project-dialog {max-height:calc(100dvh - 32px);}
+#project-dialog .open-case {max-height:calc(100dvh - 34px);overflow:auto;}
+#project-dialog.case-travelling {background:transparent;border-color:transparent;box-shadow:none;}
+#project-dialog.case-travelling .open-case {visibility:hidden}
+.case-flight {position:fixed;pointer-events:none;z-index:10;transform-origin:0 0;filter:drop-shadow(8px 18px 22px #0008);perspective:1100px;}
+.case-flight svg {display:block;width:100%;height:100%;overflow:visible;image-rendering:pixelated;transform-origin:left center;}
+#project-dialog .close {z-index:20}
+@media(prefers-reduced-motion:reduce){.case-flight{display:none}}
+.scene .hotspot {display:block;min-width:0;min-height:0;border-radius:12px;background:transparent}
+.scene #monitor {left:52.1%;top:21%;width:19.5%;height:15.6%}
+.scene #cat {left:42.3%;top:64.4%;width:7.2%;height:7.4%}
+.scene #lamp-egg {left:70%;top:36.6%;width:4.3%;height:5.9%}
+.scene #ball-egg {left:69.7%;top:77.1%;width:4.6%;height:6.8%}
+.scene .hotspot:hover {background:#ffe9a80b;box-shadow:0 0 0 1px #ffe9a82b}
+.scene .hotspot:focus-visible {outline:2px solid #f1c789;outline-offset:3px}
+@media(max-width:650px){.scene .hotspot{min-width:44px;min-height:44px}.scene #cat{left:calc(45.9% - 22px);top:calc(68.1% - 22px)}.scene #lamp-egg{left:calc(72.15% - 22px);top:calc(39.55% - 22px)}.scene #ball-egg{left:calc(72% - 22px);top:calc(80.5% - 22px)}}
+/* Curated room stays small; the quieter back catalogue lives below it. */
+.back-catalogue{max-width:1240px;margin:0 auto 28px;padding:0 24px}
+.back-catalogue details{border-top:1px solid #67536a55;border-bottom:1px solid #67536a55}
+.back-catalogue summary{display:flex;align-items:center;justify-content:space-between;gap:20px;cursor:pointer;list-style:none;padding:25px 0}
+.back-catalogue summary::-webkit-details-marker{display:none}
+.back-catalogue summary>span:first-child{display:grid;gap:12px}
+#catalogue-heading{font-size:24px;letter-spacing:-.5px}
+.catalogue-toggle{font:25px monospace;color:#d6b6df}
+.back-catalogue details[open] .catalogue-toggle{transform:rotate(45deg)}
+.back-catalogue summary:focus-visible{outline:2px solid #edc48c;outline-offset:6px}
+.catalogue-content{padding:0 0 28px}.catalogue-intro{font-size:14px;color:var(--muted);margin:0 0 20px}
+.catalogue-entry{display:grid;grid-template-columns:1fr 1.3fr;gap:30px;background:#251e302b;border:1px solid #74627b44;border-radius:8px;padding:22px}
+.catalogue-entry h3{margin:0 0 12px;font-size:20px}.catalogue-status{font:9px monospace;letter-spacing:1px;color:#c0a7be}.catalogue-entry p{margin:0;font-size:14px;line-height:1.7;color:#c5bbc9}
+.project-cover-title{position:absolute;bottom:18px;left:12px;right:12px;text-align:center;font-size:20px;padding:10px;background:#171725e8;border-radius:4px}
+@media(max-width:650px){.back-catalogue{padding:0 20px}.catalogue-entry{grid-template-columns:1fr;gap:18px}.project-cover-title{font-size:14px;left:3px;right:3px;bottom:2px;padding:5px}}
+.catalogue-story ul{font-size:13px;line-height:1.75;color:#c5bbc9;padding-left:18px;margin:16px 0}
+.catalogue-story .compatibility-note{font-size:11px;color:#a99cac;border-top:1px solid #74627b44;padding-top:14px}
+/* Immersive collection prototype: a storage box rather than a second text catalogue. */
+.collection-access{max-width:1240px;margin:0 auto 35px;padding:0 24px;display:flex;align-items:center;gap:20px}.collection-access>span{font-size:12px;color:var(--muted)}
+.scene #collection-box{left:74.22%;top:70.8%;width:7.76%;height:11.63%}
+#collection-dialog{background:#21182c;border:3px solid #846049;border-radius:12px;max-width:1000px;width:calc(100% - 32px);max-height:calc(100dvh - 30px);box-shadow:inset 0 0 0 5px #392439,0 35px 100px #000b;animation:none}
+.collection-interior{padding:28px;max-height:calc(100dvh - 36px);overflow:auto;background:linear-gradient(150deg,#433044,#211a2d 55%);border-radius:9px}
+.collection-lid{padding:5px 36px 24px 4px;border-bottom:3px solid #a0784f;box-shadow:0 6px 0 #0f101a}
+.collection-lid h2{font-size:32px;margin:12px 0 8px;letter-spacing:-1px}.collection-lid p{font-size:13px;color:#c2acbd;margin:0}
+.collection-tray{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding:28px 8px 20px;background:linear-gradient(#100f1a66,#0b0c1688);margin-top:14px;border-radius:7px;box-shadow:inset 0 5px 20px #0005}
+.collection-case{padding:0 5px 12px;min-width:0;background:transparent;border:0;text-align:left;transition:transform .2s;position:relative}
+.collection-case:hover{transform:translateY(-7px)}.collection-case:focus-visible{outline:2px solid #f0c686;outline-offset:2px;border-radius:5px}
+.collection-art{display:block;position:relative;aspect-ratio: .7;isolation:isolate}
+.collection-art img{width:100%;height:100%;object-fit:cover;object-position:center;image-rendering:pixelated;filter:drop-shadow(4px 8px 4px #0007)}
+.collection-art strong{position:absolute;left:20%;right:10%;top:38%;font:700 clamp(11px,1.45vw,20px)/1.6 monospace;color:var(--case-accent,#ead7fa);text-shadow:2px 2px #28153c;transform:skewY(8deg);text-align:center;letter-spacing:1px}
+.collection-kind{display:block;font:8px/1.7 monospace;letter-spacing:.6px;color:var(--case-accent);margin-top:9px}.collection-name{display:block;font-size:14px;margin-top:6px;color:#eee2ed}
+.collection-caption{font:9px monospace;text-align:center;color:#aa91a5;margin:12px 0 0}
+.box-flight{position:fixed;z-index:10;pointer-events:none;transform-origin:0 0;image-rendering:pixelated;filter:drop-shadow(8px 20px 20px #0008)}
+#collection-dialog.box-travelling{background:transparent;border-color:transparent;box-shadow:none}.box-travelling .collection-interior{visibility:hidden}
+.collection-flight>.collection-art{height:100%;width:100%}.collection-flight strong{font-size:20px}
+@media(max-width:650px){.collection-access{align-items:flex-start;flex-direction:column;gap:10px;padding:0 20px}.collection-interior{padding:20px 14px}.collection-tray{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 12px;padding-top:16px}.collection-art{max-height:190px}.collection-art strong{font-size:14px}.collection-lid h2{font-size:27px}.collection-name{font-size:13px}.scene #collection-box{min-width:36px;min-height:44px}}
+.no-motion .collection-case{transition:none}.no-motion .collection-case:hover{transform:none}
+@media(prefers-reduced-motion:reduce){.collection-case{transition:none}.collection-case:hover{transform:none}}
+.collection-lid{display:block;text-align:left;max-width:none;margin:0}
+/* Larger chest, opposite console stand; full source bounds keep flight registration exact. */
+.scene #collection-box{left:19.53125%;top:63.4765625%;width:14%;height:14%}
+/* Contemporary trunk shifted into the plant–ball grouping on the open floor. */
+.scene #collection-box{left:21.484375%;top:61.03515625%;width:14%;height:14%}
+
+/* Ground-footprint center at 24% along vase-to-ball contact line. */
+.scene #collection-box{left:21.620677083%;top:62.721484375%;width:14%;height:14%}
+
+/* Owner-marked X: ground-footprint center at screenshot (576,628). */
+.scene #collection-box{left:42.998141786%;top:76.278714840%;width:14%;height:14%}

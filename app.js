@@ -1,39 +1,43 @@
 "use strict";
-// Edit this collection to add verified projects. Placeholder copy is deliberately explicit.
+// Featured selection approved by João. Descriptions grounded in public READMEs (2026-10-23).
 const PROJECTS = [
   {
     title: "Voltorb Lab",
     category: "01 / PUZZLE TOOL · REACT + TYPESCRIPT",
-    description:
-      "An exact-enumeration solver for Voltorb Flip. Enter the row and column clues, reveal tiles, and see guaranteed-safe moves or ranked risks. Built for a phone beside your DS.",
-    contribution:
-      "Project details and João’s exact contribution are awaiting confirmation. No role, results, or achievements have been assumed.",
-    note: "Work-in-progress portfolio entry. Final screenshots and case study still to be added.",
+    description: "A Voltorb Flip companion for Pokémon HeartGold & SoulSilver. Enter the clues and revealed tiles to find guaranteed-safe flips or compare the remaining risks.",
+    contribution: "Exact enumeration of clue-compatible boards, with dynamic programming and pruning. Probabilities treat compatible layouts equally; the game’s level-dependent generation can change the true prior odds.",
+    note: "Unofficial fan utility. This board is illustrative, not a product screenshot. Final showcase media and personal contribution notes are still being selected.",
     url: "https://github.com/theedward/voltorb-flip",
     link: "Explore the repository",
   },
   {
-    title: "The next chapter",
-    category: "02 / PROJECT SELECTION TBD",
-    description:
-      "A place reserved for a project worth sharing. For now, this case is a prototype of how the story will feel.",
-    contribution:
-      "To be filled in once the project is selected: the challenge, what I owned, and what I learned.",
-    note: "Placeholder — not a shipped project. The cover is original concept art.",
+    title: "Heimdall",
+    category: "02 / NATIVE MACOS · SWIFTUI",
+    description: "A quiet menu bar companion for disk space. It shows occupancy and available storage at a glance, with clear low-space states and a native panel for a closer look.",
+    contribution: "Internal and external disk monitoring, configurable low-space notifications, and explicitly initiated storage reviews. Disk measurements stay local; cleanup actions require review rather than running silently in the background.",
+    note: "Final app screenshots and personal contribution notes are pending. The repository documents installation, release status and limitations.",
+    url: "https://github.com/theedward/heimdall",
+    link: "Explore the repository",
   },
   {
-    title: "A good side quest",
-    category: "03 / PROJECT SELECTION TBD",
-    description:
-      "The unexpected experiments deserve a place on the shelf, too. The project for this slot has not been selected yet.",
-    contribution:
-      "Project selection, contribution, screenshots, and links are all to be confirmed.",
-    note: "Placeholder — not a shipped project. The cover is original concept art.",
+    title: "Argus VLC SDK",
+    category: "03 / IOS INFRASTRUCTURE · VLC + VLCKIT",
+    description: "Pinned VLC/VLCKit source builds and packaging for an iOS media stack. This is the SDK dependency repository—not the Argus app or a released player showcase.",
+    contribution: "Reproducible source preparation, verified patches, component notices and an automatic picture-in-picture policy overlay. The policy checks cover dispatch and teardown; real-device PiP still needs separate SDK and app validation.",
+    note: "Build success is not App Store approval. Final technical showcase media and personal contribution notes are pending.",
+    url: "https://github.com/theedward/argus-vlc-sdk",
+    link: "Explore the SDK repository",
+  },
+  {
+    title: "PokéLens 3DS",category:"04 / GAMEPLAY ASSISTANCE · NINTENDO 3DS",
+    description:"A gameplay-assistance overlay bringing contextual battle information, exploration checklists and Pokémon guidance directly into Pokémon Omega Ruby on Nintendo 3DS.",
+    contribution:"Battle-damage guidance for supported wild single-player encounters, hidden-item markers, acquisition advice with requirements and confidence, spoiler-aware area checklists, and puzzle hints with limited coverage.",
+    note:"Usable development build. Currently targeting Pokémon Omega Ruby (USA, Rev 2) on original Nintendo 3DS.",
   },
 ];
 const $ = (selector) => document.querySelector(selector);
 const projectDialog = $("#project-dialog"),
-  aboutDialog = $("#about-dialog");
+  aboutDialog = $("#about-dialog"), collectionDialog = $("#collection-dialog");
 const dialogState = new WeakMap();
 let dialogGeneration = 0;
 function announce(message) {
@@ -60,15 +64,7 @@ function openDialog(dialog, opener, isProject = false) {
   document.body.style.overflow = "hidden";
   window.playroom.setPaused(true); // Focus the work; preserve the user's preference separately.
   dialog.querySelector(".close").focus();
-  if (isProject && !motionPreference) {
-    state.animation = dialog.animate(
-      [
-        { transform: originTransform(dialog, opener), opacity: 0.35 },
-        { transform: "translate(0,0) scale(1)", opacity: 1 },
-      ],
-      { duration: 480, easing: "cubic-bezier(.2,.8,.2,1)" },
-    );
-  }
+  if (isProject) window.caseTransition.open(dialog, Number(opener.dataset.project), motionPreference, opener);
 }
 function requestClose(dialog) {
   const state = dialogState.get(dialog);
@@ -81,34 +77,18 @@ function requestClose(dialog) {
       return;
     state.animation?.cancel();
     state.hinge?.cancel();
+    window.caseTransition.reset();
     dialog.close();
   };
+  if(dialog===collectionDialog){window.collectionTransition.close(motionPreference,finish);return;}
   if (motionPreference || dialog !== projectDialog) {
     finish();
     return;
   }
-  state.hinge = dialog
-    .querySelector(".case-inside")
-    .animate([{ transform: "rotateY(0)" }, { transform: "rotateY(74deg)" }], {
-      duration: 260,
-      easing: "ease-in",
-      fill: "forwards",
-    });
-  state.animation = dialog.animate(
-    [
-      { transform: "translate(0,0) scale(1)", opacity: 1, offset: 0 },
-      { transform: "translate(0,0) scale(.94)", opacity: 1, offset: 0.3 },
-      {
-        transform: originTransform(dialog, state.opener),
-        opacity: 0,
-        offset: 1,
-      },
-    ],
-    { duration: 420, easing: "cubic-bezier(.6,0,.8,.3)", fill: "forwards" },
-  );
-  state.animation.finished.then(finish, () => {});
+  window.caseTransition.close(dialog, motionPreference, finish);
 }
 function openProject(index, trigger) {
+  if (projectDialog.open) return;
   const p = PROJECTS[index];
   if (!p) return;
   $("#project-title").textContent = p.title;
@@ -118,12 +98,12 @@ function openProject(index, trigger) {
   $("#project-note").textContent = p.note;
   $("#case-number").textContent = `JOÃO SEIXAS / PLAYROOM / 0${index + 1}`;
   const visual = $("#project-visual");
-  visual.replaceChildren(
-    document
-      .querySelector(`.game-case[data-project="${index}"] .case-art`)
-      .cloneNode(true),
-  );
-  visual.className = ["voltorb", "garden", "moon"][index];
+  const cover=document.createElement("span");cover.className="case-art";
+  const coverImage=document.createElement("img");coverImage.src="assets/room/case1.png";coverImage.alt="Provisional purple project cover";cover.append(coverImage);visual.replaceChildren(cover);
+  visual.className = ["voltorb", "heimdall", "argus", "pokelens"][index];
+  if(index>0){
+    const title=document.createElement("strong");title.className="project-cover-title";title.textContent=p.title;visual.append(title);
+  }
   if (index === 0) {
     const board = document.createElement("div");
     board.className = "board-illustration";
@@ -180,7 +160,7 @@ function openProject(index, trigger) {
   document.querySelector(".art-disclaimer").textContent =
     index === 0
       ? "ILLUSTRATIVE BOARD · NOT A PRODUCT SCREENSHOT"
-      : "CONCEPT ART · NOT A PRODUCT SCREENSHOT";
+      : "PROVISIONAL COVER · SHOWCASE MEDIA PENDING";
   const actions = $("#project-actions");
   actions.replaceChildren();
   if (p.url) {
@@ -192,6 +172,7 @@ function openProject(index, trigger) {
     a.rel = "noopener noreferrer";
     actions.append(a);
   }
+  projectDialog.querySelector('.close').setAttribute('aria-label',collectionDialog.open?'Back to collection':'Close project');
   openDialog(projectDialog, trigger, true);
 }
 document
@@ -204,7 +185,14 @@ document
 $("#about").addEventListener("click", (e) =>
   openDialog(aboutDialog, e.currentTarget),
 );
-for (const dialog of [projectDialog, aboutDialog]) {
+function openCollection(trigger){
+  if(collectionDialog.open||projectDialog.open)return;
+  openDialog(collectionDialog,trigger);
+  window.collectionTransition.open(collectionDialog, motionPreference);
+}
+$("#collection-box").addEventListener("click",e=>openCollection(e.currentTarget));
+$("#collection-access").addEventListener("click",e=>openCollection(e.currentTarget));
+for (const dialog of [projectDialog, aboutDialog, collectionDialog]) {
   dialog
     .querySelector(".close")
     .addEventListener("click", () => requestClose(dialog));
@@ -224,7 +212,11 @@ for (const dialog of [projectDialog, aboutDialog]) {
       requestClose(dialog);
   });
   dialog.addEventListener("close", () => {
-    if (dialog.open || document.querySelector("dialog[open]")) return; // Ignore stale close events.
+    if(dialog.open)return;
+    if(dialog===projectDialog)window.caseTransition.reset();
+    if(dialog===collectionDialog)window.collectionTransition.reset();
+    if(document.querySelector("dialog[open]")){dialogState.get(dialog)?.opener?.focus();return;}
+    window.caseTransition.reset();
     document.body.style.overflow = "";
     window.playroom.setPaused(motionPreference);
     const active = document.activeElement;
@@ -256,6 +248,8 @@ function setMotion(paused) {
   motionPreference = paused;
   window.playroom.setPaused(paused || !!document.querySelector("dialog[open]"));
   document.documentElement.classList.toggle("no-motion", paused);
+  if(paused && projectDialog.open) window.caseTransition.reset();
+  if(paused && collectionDialog.open) window.collectionTransition.reset();
   $("#motion").setAttribute("aria-pressed", String(paused));
   $("#motion span").textContent = paused ? "Resume motion" : "Pause motion";
 }
@@ -268,22 +262,17 @@ $("#motion").addEventListener("click", () => {
   setMotion(!motionPreference);
 });
 $("#monitor").addEventListener("click", () => {
-  const index = window.playroom.cycleScreen();
-  announce(
-    [
-      "The monitor shows a code editor.",
-      "The monitor shows a puzzle concept.",
-      "The monitor shows a drifting planet.",
-    ][index],
-  );
+  const index=window.playroom.cycleScreen();
+  announce(["A tiny pixel landscape on the monitor.","The monitor switches to a build preview.","The monitor switches to a puzzle grid."][index]);
 });
 $("#cat").addEventListener("click", () => {
-  window.playroom.petCat();
-  announce("Ahri opens her blue eyes. Hello, sleepy friend.");
+  announce(window.playroom.petCat() ? "Ahri gives a sleepy yawn." : "Ahri is resting. Hello, sleepy friend.");
 });
-$("#headphones").addEventListener("click", () => {
-  window.playroom.hum();
-  announce("A little tune appears above João’s headphones. Visual only.");
+$("#lamp-egg").addEventListener("click", () => {
+  announce(window.playroom.dipLamp() ? "The desk lamp gently dips and warms back up." : "The desk lamp stays warm and steady.");
+});
+$("#ball-egg").addEventListener("click", () => {
+  announce(window.playroom.bounceBall() ? "One little keepy-uppy. Back in its spot." : "The Total 90 is ready for the next match.");
 });
 // Original no-sample synthwave draft. Never fetch/play or remember opt-in before a click.
 const ambience = $("#ambience");
