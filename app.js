@@ -98,69 +98,10 @@ function openProject(index, trigger) {
   $("#project-note").textContent = p.note;
   $("#case-number").textContent = `JOÃO SEIXAS / PLAYROOM / 0${index + 1}`;
   const visual = $("#project-visual");
-  const cover=document.createElement("span");cover.className="case-art";
-  const coverImage=document.createElement("img");window.playroom.prepareImage(coverImage,"assets/room/case1.png");coverImage.alt="Provisional purple project cover";cover.append(coverImage);visual.replaceChildren(cover);
+  const cover=document.createElement("span");cover.className="approved-project-cover";
+  const coverImage=document.createElement("img");coverImage.src=window.PROJECT_COVERS.flat(index);coverImage.alt=`${p.title} conceptual cover artwork`;cover.append(coverImage);visual.replaceChildren(cover);
   visual.className = ["voltorb", "heimdall", "argus", "pokelens"][index];
-  if(index>0){
-    const title=document.createElement("strong");title.className="project-cover-title";title.textContent=p.title;visual.append(title);
-  }
-  if (index === 0) {
-    const board = document.createElement("div");
-    board.className = "board-illustration";
-    board.setAttribute("role", "img");
-    board.setAttribute(
-      "aria-label",
-      "Illustrative five-by-five puzzle board, not an actual game state or product screenshot",
-    );
-    const label = document.createElement("strong");
-    label.textContent = "VOLTORB // LAB";
-    board.append(label);
-    const grid = document.createElement("div");
-    grid.className = "puzzle-grid";
-    const values = [
-      "?",
-      "1",
-      "?",
-      "2",
-      "?",
-      "1",
-      "?",
-      "?",
-      "?",
-      "3",
-      "?",
-      "?",
-      "2",
-      "?",
-      "?",
-      "?",
-      "1",
-      "?",
-      "?",
-      "?",
-      "2",
-      "?",
-      "?",
-      "3",
-      "?",
-    ];
-    values.forEach((value, i) => {
-      const tile = document.createElement("span");
-      tile.textContent = value;
-      tile.className = value === "?" ? "unknown" : "revealed";
-      tile.setAttribute("aria-hidden", "true");
-      grid.append(tile);
-    });
-    board.append(grid);
-    const caption = document.createElement("p");
-    caption.textContent = "A little logic. A little less luck.";
-    board.append(caption);
-    visual.replaceChildren(board);
-  }
-  document.querySelector(".art-disclaimer").textContent =
-    index === 0
-      ? "ILLUSTRATIVE BOARD · NOT A PRODUCT SCREENSHOT"
-      : "PROVISIONAL COVER · SHOWCASE MEDIA PENDING";
+  document.querySelector(".art-disclaimer").textContent="CONCEPTUAL COVER ART · NOT A PRODUCT SCREENSHOT";
   const actions = $("#project-actions");
   actions.replaceChildren();
   if (p.url) {

@@ -9,7 +9,12 @@
       content="João Seixas — developer, player, maker. Come in, pick a project, and explore my playroom."
     />
     <title>João Seixas · My playroom</title>
-    <link rel="stylesheet" href="style.css?v=header-3d-1" />
+    <link rel="icon" href="assets/favicon/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="assets/favicon/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="icon" href="assets/favicon/favicon-16.png" type="image/png" sizes="16x16" />
+    <link rel="shortcut icon" href="assets/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" href="assets/favicon/favicon-180.png" sizes="180x180" />
+    <link rel="stylesheet" href="style.css?v=covers-1" />
   </head>
   <body>
     <a class="skip" href="#projects">Skip to projects</a>
@@ -58,7 +63,7 @@
               aria-label="Open Voltorb Lab project"
             >
               <span class="spine">01</span
-              ><span class="case-art"><img src="assets/room/case1.webp" onerror="this.onerror=null;this.src='assets/room/case1.png'" alt="Blank purple provisional project case" /></span
+              ><span class="case-art"><img src="assets/covers/voltorb-lab.png" alt="" /></span
               ><small>VOLTORB LAB</small></button
             ><button
               class="game-case garden"
@@ -66,7 +71,7 @@
               aria-label="Open Heimdall project"
             >
               <span class="spine">02</span
-              ><span class="case-art"><img src="assets/room/case1.webp" onerror="this.onerror=null;this.src='assets/room/case1.png'" alt="Blank purple provisional project case" /></span
+              ><span class="case-art"><img src="assets/covers/heimdall.png" alt="" /></span
               ><small>HEIMDALL</small></button
             ><button
               class="game-case moon"
@@ -74,7 +79,7 @@
               aria-label="Open Argus VLC SDK project"
             >
               <span class="spine">03</span
-              ><span class="case-art"><img src="assets/room/case1.webp" onerror="this.onerror=null;this.src='assets/room/case1.png'" alt="Blank purple provisional project case" /></span
+              ><span class="case-art"><img src="assets/covers/argus-vlc-sdk.png" alt="" /></span
               ><small>ARGUS VLC SDK</small>
             </button>
           </div>
@@ -185,12 +190,12 @@
       <div class="collection-interior">
         <header class="collection-lid"><span class="eyebrow">KEEP THE GOOD STUFF</span><h2 id="collection-title">The game chest.</h2><p>A few things I’ve built. Pick a case and have a look.</p></header>
         <div class="collection-tray" aria-label="Project collection">
-          <button class="collection-case" data-project="0" style="--case-accent:#cfda83"><span class="collection-art"><img src="assets/room/case1.webp" onerror="this.onerror=null;this.src='assets/room/case1.png'" alt="" /><strong>VOLTORB<br/>LAB</strong></span><span class="collection-kind">FEATURED · PUZZLE TOOL</span><span class="collection-name">Voltorb Lab</span></button>
-          <button class="collection-case" data-project="1" style="--case-accent:#d9b789"><span class="collection-art"><img src="assets/room/case1.webp" onerror="this.onerror=null;this.src='assets/room/case1.png'" alt="" /><strong>HEIMDALL</strong></span><span class="collection-kind">FEATURED · MACOS</span><span class="collection-name">Heimdall</span></button>
-          <button class="collection-case" data-project="2" style="--case-accent:#a9c9ee"><span class="collection-art"><img src="assets/room/case1.webp" onerror="this.onerror=null;this.src='assets/room/case1.png'" alt="" /><strong>ARGUS<br/>VLC SDK</strong></span><span class="collection-kind">FEATURED · IOS SDK</span><span class="collection-name">Argus VLC SDK</span></button>
-          <button class="collection-case" data-project="3" style="--case-accent:#a6d2b4"><span class="collection-art"><img src="assets/room/case1.webp" onerror="this.onerror=null;this.src='assets/room/case1.png'" alt="" /><strong>POKÉLENS<br/>3DS</strong></span><span class="collection-kind">SIDE QUEST · 3DS</span><span class="collection-name">PokéLens 3DS</span></button>
+          <button class="collection-case" data-project="0" style="--case-accent:#cfda83"><span class="collection-art"><img src="assets/covers/voltorb-lab.png" alt="" /></span><span class="collection-kind">FEATURED · PUZZLE TOOL</span><span class="collection-name">Voltorb Lab</span></button>
+          <button class="collection-case" data-project="1" style="--case-accent:#d9b789"><span class="collection-art"><img src="assets/covers/heimdall.png" alt="" /></span><span class="collection-kind">FEATURED · MACOS</span><span class="collection-name">Heimdall</span></button>
+          <button class="collection-case" data-project="2" style="--case-accent:#a9c9ee"><span class="collection-art"><img src="assets/covers/argus-vlc-sdk.png" alt="" /></span><span class="collection-kind">FEATURED · IOS SDK</span><span class="collection-name">Argus VLC SDK</span></button>
+          <button class="collection-case" data-project="3" style="--case-accent:#a6d2b4"><span class="collection-art"><img src="assets/covers/pokelens-3ds.png" alt="" /></span><span class="collection-kind">SIDE QUEST · 3DS</span><span class="collection-name">PokéLens 3DS</span></button>
         </div>
-        <p class="collection-caption">Provisional cover designs · not product screenshots</p>
+        <p class="collection-caption">Original conceptual cover art · not product screenshots</p>
       </div>
     </dialog>
     <dialog id="project-dialog" aria-labelledby="project-title">
@@ -266,10 +271,11 @@
     <script src="room-assets.js?v=chest-owner-x-5"></script>
     <script src="passive-motion.js?v=clicks-1"></script>
     <script src="ambient-events.js?v=clicks-1"></script>
-    <script src="room.js?v=collection-1"></script>
-    <script src="case-transition.js?v=collection-1"></script>
+    <script src="project-covers.js?v=approved-1"></script>
+    <script src="room.js?v=covers-1"></script>
+    <script src="case-transition.js?v=covers-1"></script>
     <script src="collection-transition.js?v=chest-modern-3"></script>
-    <script src="app.js?v=collection-2"></script>
+    <script src="app.js?v=covers-1"></script>
     <script type="module" src="header-3d.mjs"></script>
   </body>
 </html>

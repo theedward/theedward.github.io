@@ -65,6 +65,8 @@
         catch(pngError){state.failedAssets.push(src);}
       }
     }));
+    await window.PROJECT_COVERS?.ready;
+    [0,1,2].forEach(i=>{const art=window.PROJECT_COVERS?.canvas(i);if(art)textures[`case${i+1}`]=window.PIXI.Texture.from(art);});
     function sprite(id,group,label=id){
       if(!textures[id])return null;
       const s=new Sprite({texture:textures[id],label});
