@@ -24,7 +24,9 @@ window.caseTransition = (() => {
   function makeFlight(s){
     const flight=document.createElement('div');flight.className='case-flight';flight.setAttribute('aria-hidden','true');
     // Same approved source, same affine projection as the shelf sprite (no substitute art).
-    flight.innerHTML='<svg viewBox="0 0 57.8 86.73" preserveAspectRatio="none"><image href="assets/room/case1.png" width="1536" height="1024" transform="matrix(.085 .01004 0 .085 -36.55 -7.7172)" /></svg>';
+    flight.innerHTML='<svg viewBox="0 0 57.8 86.73" preserveAspectRatio="none"><image href="assets/room/case1.webp" width="1536" height="1024" transform="matrix(.085 .01004 0 .085 -36.55 -7.7172)" /></svg>';
+    const raster=flight.querySelector?.('image');
+    if(raster){raster.setAttribute('href',window.playroom.artSource('assets/room/case1.png'));raster.addEventListener('error',()=>raster.setAttribute('href','assets/room/case1.png'),{once:true});}
     if(s.fromCollection){flight.replaceChildren(s.shelf.cloneNode(true));flight.classList.add('collection-flight');}
     s.dialog.append(flight);s.flight=flight;geometry(s);
   }

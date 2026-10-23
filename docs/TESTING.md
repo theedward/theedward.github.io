@@ -1,3 +1,3 @@
-# Checkpoint validation
+# Current validation
 
-See README.md for current focused suites and browser-testing limitations. The prior pixel-renderer report has been superseded by this layered Pixi scene.
+See README.md for passed focused suites, actual Chromium Canvas checks and remaining live WebGL/mobile/Safari limits. No CI pipeline is configured in this checkpoint.

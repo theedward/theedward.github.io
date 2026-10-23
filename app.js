@@ -99,7 +99,7 @@ function openProject(index, trigger) {
   $("#case-number").textContent = `JOÃO SEIXAS / PLAYROOM / 0${index + 1}`;
   const visual = $("#project-visual");
   const cover=document.createElement("span");cover.className="case-art";
-  const coverImage=document.createElement("img");coverImage.src="assets/room/case1.png";coverImage.alt="Provisional purple project cover";cover.append(coverImage);visual.replaceChildren(cover);
+  const coverImage=document.createElement("img");window.playroom.prepareImage(coverImage,"assets/room/case1.png");coverImage.alt="Provisional purple project cover";cover.append(coverImage);visual.replaceChildren(cover);
   visual.className = ["voltorb", "heimdall", "argus", "pokelens"][index];
   if(index>0){
     const title=document.createElement("strong");title.className="project-cover-title";title.textContent=p.title;visual.append(title);
@@ -269,10 +269,10 @@ $("#cat").addEventListener("click", () => {
   announce(window.playroom.petCat() ? "Ahri gives a sleepy yawn." : "Ahri is resting. Hello, sleepy friend.");
 });
 $("#lamp-egg").addEventListener("click", () => {
-  announce(window.playroom.dipLamp() ? "The desk lamp gently dips and warms back up." : "The desk lamp stays warm and steady.");
+  announce(window.playroom.dipLamp?.() ? "The desk lamp gently dips and warms back up." : "The desk lamp stays warm and steady.");
 });
 $("#ball-egg").addEventListener("click", () => {
-  announce(window.playroom.bounceBall() ? "One little keepy-uppy. Back in its spot." : "The Total 90 is ready for the next match.");
+  announce(window.playroom.bounceBall?.() ? "One little keepy-uppy. Back in its spot." : "The Total 90 is ready for the next match.");
 });
 // Original no-sample synthwave draft. Never fetch/play or remember opt-in before a click.
 const ambience = $("#ambience");

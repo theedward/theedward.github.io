@@ -4,7 +4,9 @@ window.installPassiveMotion = ({PIXI,app,manifest,named,tracks,canvas}) => {
   const smooth=x=>{x=Math.max(0,Math.min(1,x));return x*x*(3-2*x);};
   const bell=(x,y,cx,cy,rx,ry)=>Math.pow(Math.max(0,1-((x-cx)/rx)**2-((y-cy)/ry)**2),2);
   const mesh=(id,deform)=>{
-    const old=named.get(id),parent=old.parent,index=parent.getChildIndex(old);
+    const old=named.get(id);
+    if(!old?.parent)return; // A failed optional sprite must not abort the remaining scene.
+    const parent=old.parent,index=parent.getChildIndex(old);
     if(app.renderer.name==='canvas'){
       // Canvas renderer has no MeshPipe. Render the same local deformation into a
       // small runtime texture using affine triangles; source files remain untouched.
@@ -16,14 +18,19 @@ window.installPassiveMotion = ({PIXI,app,manifest,named,tracks,canvas}) => {
       replacement.position.copyFrom(old.position);replacement.width=w*scale;replacement.height=h*scale;replacement.eventMode='none';replacement.label=id;
       parent.removeChild(old);parent.addChildAt(replacement,index);named.set(id,replacement);
       const nx=16,ny=20;
-      function triangle(points,t){
-        const a=points[0],b=points[1],c=points[2],dest=points.map(([x,y])=>{const d=deform(x,y,t);return [(x+d[0])*sx,(y+d[1])*sy];});
-        const u=b[0]-a[0],v=b[1]-a[1],q=c[0]-a[0],r=c[1]-a[1],det=u*r-v*q;
+      // Grid coordinates and affine denominators are invariant. Shared vertices
+      // are deformed once per frame, with the same draw order and triangle math.
+      const vertices=Array.from({length:(nx+1)*(ny+1)},(_,i)=>[(i%(nx+1))*w/nx,Math.floor(i/(nx+1))*h/ny]);
+      const triangles=[];
+      function addTriangle(ids){const [a,b,c]=ids.map(i=>vertices[i]),u=b[0]-a[0],v=b[1]-a[1],q=c[0]-a[0],r=c[1]-a[1];triangles.push({ids,a,u,v,q,r,det:u*r-v*q});}
+      for(let y=0;y<ny;y++)for(let x=0;x<nx;x++){const a=y*(nx+1)+x,b=a+1,c=a+nx+1,d=c+1;addTriangle([a,b,c]);addTriangle([b,d,c]);}
+      function triangle({ids,a,u,v,q,r,det},positions){
+        const dest=ids.map(i=>positions[i]);
         const dx=dest[1][0]-dest[0][0],dy=dest[1][1]-dest[0][1],ex=dest[2][0]-dest[0][0],ey=dest[2][1]-dest[0][1];
         const A=(dx*r-ex*v)/det,B=(dy*r-ey*v)/det,C=(ex*u-dx*q)/det,D=(ey*u-dy*q)/det;
         const center=[(dest[0][0]+dest[1][0]+dest[2][0])/3,(dest[0][1]+dest[1][1]+dest[2][1])/3];const clip=dest.map(p=>{const dx=p[0]-center[0],dy=p[1]-center[1],length=Math.hypot(dx,dy);return [p[0]+dx/length*.35,p[1]+dy/length*.35];});ctx.save();ctx.beginPath();ctx.moveTo(...clip[0]);ctx.lineTo(...clip[1]);ctx.lineTo(...clip[2]);ctx.closePath();ctx.clip();ctx.setTransform(A,B,C,D,dest[0][0]-A*a[0]-C*a[1],dest[0][1]-B*a[0]-D*a[1]);ctx.drawImage(source,0,0);ctx.restore();
       }
-      let frame=-1;tracks.set(id,t=>{if(Math.floor(t*15)===frame)return;frame=Math.floor(t*15);ctx.clearRect(0,0,canvas2.width,canvas2.height);for(let y=0;y<ny;y++)for(let x=0;x<nx;x++){const a=[x*w/nx,y*h/ny],b=[(x+1)*w/nx,y*h/ny],c=[x*w/nx,(y+1)*h/ny],d=[(x+1)*w/nx,(y+1)*h/ny];triangle([a,b,c],t);triangle([b,d,c],t);}texture.source.update();});
+      let frame=-1;tracks.set(id,t=>{if(Math.floor(t*15)===frame)return;frame=Math.floor(t*15);ctx.clearRect(0,0,canvas2.width,canvas2.height);const positions=vertices.map(([x,y])=>{const d=deform(x,y,t);return [(x+d[0])*sx,(y+d[1])*sy];});triangles.forEach(tri=>triangle(tri,positions));texture.source.update();});
       return;
     }
 
@@ -46,9 +53,10 @@ window.installPassiveMotion = ({PIXI,app,manifest,named,tracks,canvas}) => {
     return [head*3*nod,typing*(left*3.4*Math.sin(t*12)+right*3*Math.sin(t*14+1))-head*4*nod];
   });
   const cloud=named.get('clouds'),cloudPose=manifest.objects.clouds.matrix;
-  tracks.set('clouds',t=>{const drift=24*Math.sin(t*2*Math.PI/100);cloud.x=cloudPose[4]+drift;cloud.y=cloudPose[5]-drift*.443;});
+  if(cloud) tracks.set('clouds',t=>{const drift=24*Math.sin(t*2*Math.PI/100);cloud.x=cloudPose[4]+drift;cloud.y=cloudPose[5]-drift*.443;});
   // Screen content is a purpose-built code UI, not replacement artwork. Frames stay untouched.
   const furniture=named.get('furniture'),monitor=named.get('monitors'),screens=new Container({label:'monitor-content'});
+  if(!monitor || !furniture){tracks.forEach(update=>update(0));return;}
   furniture.addChildAt(screens,furniture.getChildIndex(monitor)+1);
   const pose=manifest.objects.monitors;
   const panel=(x,y)=>{const c=new Container();c.setFromMatrix(new Matrix(pose.scale,.395*pose.scale,0,pose.scale,pose.x+x*pose.scale,pose.y+y*pose.scale));screens.addChild(c);return c;};

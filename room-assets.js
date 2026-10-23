@@ -22,14 +22,14 @@ window.PLAYROOM_ART = {
     surfboard: 'assets/room/surfboard.png',
     cabinet: 'assets/room/cabinet.png',
     switch: 'assets/room/switch.png',
-    nintendo3ds: 'assets/room/nintendo3ds.png',
-    rogally: 'assets/room/rogally.png',
     case2: 'assets/room/case1.png', case3: 'assets/room/case1.png',
     rug: 'assets/room/rug.png', shell: 'assets/room/shell.png', desk: 'assets/room/desk.png',
     monitors: 'assets/room/monitors.png', keyboard: 'assets/room/keyboard.png',
     mousemat: 'assets/room/mousemat.png', mouse: 'assets/room/mouse.png', chair: 'assets/room/chair.png',
     character: 'assets/room/character.png', ahri: 'assets/room/ahri.png',
   },
+  // Retained for future display rotation; not downloaded by the initial scene.
+  optionalAssets: { nintendo3ds: 'assets/room/nintendo3ds.png', rogally: 'assets/room/rogally.png' },
   objects: {
     collectionbox: { x: 660.451458, y: 781.094040, scale: .14 },
     trailingplant: { x: 1321, y: 320, scale: .055 },

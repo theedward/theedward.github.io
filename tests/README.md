@@ -1,3 +1,3 @@
 # Tests
 
-See the root README for dependency-free Node suites and the optional Playwright harness. Deterministic DOM/WAAPI and scene mocks do not establish visual browser fidelity.
+See the root README for nine focused Node suites and optional Playwright harness. Renderer/DOM mocks and offline CPU geometry inspection do not replace live GPU browser tests.

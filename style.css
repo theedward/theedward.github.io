@@ -1348,3 +1348,11 @@ nav { padding-top: 0; }
 
 /* Owner-marked X: ground-footprint center at screenshot (576,628). */
 .scene #collection-box{left:42.998141786%;top:76.278714840%;width:14%;height:14%}
+
+/* A compact real-geometry wordmark; approved raster is a graceful static fallback. */
+.intro h1{margin:0;line-height:1;}.intro h1 a{display:block;position:relative;}
+.intro h1 #name-art{display:block;position:relative;width:290px;height:88px;margin:-17px 0 -8px;}
+#name-art img,#name-art canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;image-rendering:auto;}
+#name-art.gpu-ready img{visibility:hidden;}
+.name-accessible{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+@media(max-width:650px){.intro h1 #name-art{width:245px;height:78px;margin:-14px 0 -7px;}}

@@ -4,13 +4,20 @@
   const manifest = window.PLAYROOM_ART;
   const state = {screen:0, console:0, paused:matchMedia('(prefers-reduced-motion: reduce)').matches, catUntil:0, notesUntil:0, assetsReady:false, failedAssets:[], renderer:'pixijs', error:null};
   let app, time=0, offscreen=false;
+  const eggButtons = ['monitor','cat','lamp-egg','ball-egg'];
+  function setEggReady(id, ready) { const button=document.getElementById(id); if(button) {button.disabled=!ready;button.setAttribute('aria-disabled',String(!ready));} }
+  eggButtons.forEach(id=>setEggReady(id,false));
+  const resolvedAssets = new Map();
+  const preferredAsset = src=>src.replace(/\.png$/,'.webp');
   const named = new Map();
   const animationTracks = new Map();
   const api = window.playroom = {
     state,
     setPaused(value) { state.paused=!!value; syncTicker(); render(); },
     cycleScreen() { state.screen=(state.screen+1)%3; return state.screen; },
-    petCat() { state.catUntil=time+3; },
+    petCat() { return false; },
+    dipLamp() { return false; },
+    bounceBall() { return false; },
     hum() { state.notesUntil=time+3; },
     getTime:()=>time,
     // Passive tracks are locally bounded; HTML retains all interactions.
@@ -18,6 +25,12 @@
     removeAnimation(id) { animationTracks.delete(id); syncTicker(); },
     getObject:id=>named.get(id),
     render:()=>render(),
+    artSource:src=>resolvedAssets.get(src)||preferredAsset(src),
+    prepareImage(image, src) {
+      image.onerror=()=>{image.onerror=null;image.src=src;};
+      image.src=api.artSource(src);
+      return image;
+    },
     ready:null,
   };
   function render(){if(app?.renderer) app.render();}
@@ -45,7 +58,12 @@
     named.set('architecture',architecture);named.set('furniture',furniture);named.set('foreground',foreground);
     const textures={};
     await Promise.all(Object.entries(manifest.assets).map(async([id,src])=>{
-      try {textures[id]=await Assets.load(src);} catch(e){state.failedAssets.push(src);}
+      const preferred=preferredAsset(src);
+      try {textures[id]=await Assets.load(preferred);resolvedAssets.set(src,preferred);}
+      catch(webpError){
+        try {textures[id]=await Assets.load(src);resolvedAssets.set(src,src);}
+        catch(pngError){state.failedAssets.push(src);}
+      }
     }));
     function sprite(id,group,label=id){
       if(!textures[id])return null;
@@ -79,15 +97,16 @@
     sprite('floorplant',foreground);
     sprite('collectionbox',foreground);
     window.installPassiveMotion({PIXI:window.PIXI,app,manifest,named,tracks:animationTracks,canvas});
-    window.installAmbientEvents({PIXI:window.PIXI,manifest,named,tracks:animationTracks,textures,canvas});
+    const ambientReady=!!(named.get('ahri') && named.get('lamp') && named.get('skyline') && textures.yawnsheet);
+    if(ambientReady) window.installAmbientEvents({PIXI:window.PIXI,manifest,named,tracks:animationTracks,textures,canvas});
     // One locally bounded kick. The approved ball returns exactly to its floor contact.
     const football=named.get('football'),ballHome=manifest.objects.football;
     let kickedAt=-Infinity;
     api.bounceBall=()=>{
-      if(state.paused || time-kickedAt<1.3)return false;
+      if(!football || state.paused || time-kickedAt<1.3)return false;
       kickedAt=time;return true;
     };
-    animationTracks.set('football-click',t=>{
+    if(football) animationTracks.set('football-click',t=>{
       const p=t-kickedAt,active=p>=0&&p<1.2;
       const lift=active?12*Math.sin(Math.PI*p/1.2):0;
       football.y=ballHome.y-lift;
@@ -111,6 +130,10 @@
     });
     api.application=app;
     state.assetsReady=true;
+    setEggReady('monitor',!!named.get('monitors'));
+    setEggReady('cat',ambientReady);
+    setEggReady('lamp-egg',ambientReady);
+    setEggReady('ball-egg',!!football);
     canvas.dataset.assetsReady='true';
     canvas.dataset.renderer=app.renderer.name;
     document.getElementById('scene').classList.remove('is-loading');
@@ -119,6 +142,7 @@
     return api;
   })().catch(error=>{
     state.error=String(error);
+    eggButtons.forEach(id=>setEggReady(id,false));
     document.getElementById('scene').classList.remove('is-loading');
     document.querySelector('.scene-status').textContent='This browser could not start the room renderer. The project list below still works.';
     console.error('Playroom renderer initialization failed:',error);
