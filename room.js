@@ -76,17 +76,41 @@
       s.eventMode='none';group.addChild(s);named.set(label,s);return s;
     }
     function paneMask(){const mask=new Graphics();manifest.windowPanes.forEach(points=>mask.poly(points).fill(0xffffff));return mask;}
+    function maskSprite(s,pose,points){
+      const mask=new Graphics().poly(points).fill(0xffffff);
+      if(pose.matrix)mask.setFromMatrix(new Matrix(...pose.matrix));
+      else{mask.position.set(pose.x,pose.y);mask.scale.set(pose.scale);}
+      foreground.addChild(mask);s.mask=mask;
+    }
     const outsideMask=paneMask();world.addChild(outsideMask);exterior.mask=outsideMask;
     manifest.layers.exterior.forEach(id=>sprite(id,exterior));
     manifest.layers.architecture.forEach(id=>sprite(id,architecture));
     manifest.layers.furniture.forEach(id=>sprite(id,furniture,id==='chair'?'chair-base':id));
     sprite('character',foreground);
+    // A missing correction asset must never amputate the original character.
+    const correctedLeg=!!(textures.character&&textures.rightleg);
+    if(correctedLeg)maskSprite(sprite('rightleg',foreground),manifest.objects.rightleg,window.SEATED_LEG.outline(manifest.rightLegBounds,manifest.rightLegBend));
     const chairBack=sprite('chair',foreground,'chair-back');
     if(chairBack){
       const pose=manifest.objects.chair;
       const mask=new Graphics().poly(manifest.chairBack).fill(0xffffff);
       mask.position.set(pose.x,pose.y);mask.scale.set(pose.scale);
       foreground.addChild(mask);chairBack.mask=mask;
+    }
+    if(correctedLeg){
+      const arm=sprite('chair',foreground,'chair-arm');
+      if(arm)maskSprite(arm,manifest.objects.chair,manifest.chairArm);
+      // Entire leg stays behind the arm. The real desk then occludes both where
+      // they enter its footprint; never redraw a distal knee over the arm tip.
+      const deskFront=sprite('desk',foreground,'desk-foreground');
+      if(deskFront)maskSprite(deskFront,manifest.objects.desk,manifest.deskForeground);
+    }
+    const chairFront=sprite('chair',foreground,'chair-foreground');
+    if(chairFront){
+      const pose=manifest.objects.chair,mask=new Graphics();
+      manifest.chairForeground.forEach(points=>mask.poly(points).fill(0xffffff));
+      mask.position.set(pose.x,pose.y);mask.scale.set(pose.scale);
+      foreground.addChild(mask);chairFront.mask=mask;
     }
     const scarf=sprite('scarf',foreground);
     if(scarf){
@@ -99,6 +123,10 @@
     sprite('floorplant',foreground);
     sprite('collectionbox',foreground);
     window.installPassiveMotion({PIXI:window.PIXI,app,manifest,named,tracks:animationTracks,canvas});
+    window.SEATED_LEG.install({PIXI:window.PIXI,app,manifest,named});
+    // Apply after passive motion replaces the character Sprite with a MeshPlane
+    // (or Canvas sprite), so the original-leg cutout survives either renderer.
+    if(correctedLeg)maskSprite(named.get('character'),manifest.objects.character,manifest.characterKeep);
     const ambientReady=!!(named.get('ahri') && named.get('lamp') && named.get('skyline') && textures.yawnsheet);
     if(ambientReady) window.installAmbientEvents({PIXI:window.PIXI,manifest,named,tracks:animationTracks,textures,canvas});
     // One locally bounded kick. The approved ball returns exactly to its floor contact.

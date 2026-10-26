@@ -2,6 +2,7 @@
 window.PLAYROOM_ART = {
   width: 1536, height: 1024,
   assets: {
+    rightleg: 'assets/room/character-right-leg-v1.png',
     collectionbox: 'assets/room/collection-chest-modern-v3.png',
     yawnsheet: 'assets/room/ahri-yawn-sheet-v1.png',
     trailingplant: 'assets/room/trailing-plant-v1.png',
@@ -31,6 +32,7 @@ window.PLAYROOM_ART = {
   // Retained for future display rotation; not downloaded by the initial scene.
   optionalAssets: { nintendo3ds: 'assets/room/nintendo3ds.png', rogally: 'assets/room/rogally.png' },
   objects: {
+    rightleg: { matrix: [.15, -.015, 0, .16, 869, 457] },
     collectionbox: { x: 660.451458, y: 781.094040, scale: .14 },
     trailingplant: { x: 1321, y: 320, scale: .055 },
     floorplant: { x: 120, y: 492, scale: .18 },
@@ -84,4 +86,20 @@ window.PLAYROOM_ART = {
   ],
   // Approved chair repeated through a runtime mask above the seated torso.
   chairBack: [535,28,605,35,686,92,707,157,789,217,802,290,816,326,855,500,883,590,855,688,777,717,549,595,502,527,496,440,460,265,460,218,497,151,500,91],
+  // Original chair-local geometry. The approved far-shoe hinge/stem stays fixed.
+  chairForeground: [
+    [786,607,817,608,847,622,863,641,865,663,854,694,835,716,819,726,819,760,810,775,779,780,752,767,752,730,760,708,760,664],
+  ],
+  chairArm: [973,468,1109,407,1131,409,1168,426,1172,438,1170,459,1109,489,1107,502,1097,508,1097,643,1100,672,1085,689,1064,691,1039,679,1039,650,1043,648,1043,515,1014,519,985,508,972,496],
+  // Positive keep mask removes ONLY the old near/right leg, preserving the
+  // original upper body and far leg. Positive masks also work in Canvas2D.
+  characterKeep: [0,0,1024,0,1024,770,535,770,410,985,580,988,718,964,692,1008,692,1260,665,1280,665,1536,0,1536],
+  // New independent right leg rests on the cushion and bends beyond its front
+  // edge. Bounds exclude faint generated alpha specks outside the leg.
+  rightLegBounds: [175,145,450,165,740,195,900,215,985,255,1000,940,1250,1010,1250,1190,700,1190,675,970,665,510,70,510,50,350],
+  // Lower the knee under the desk while pinning the hip and shoe geometry.
+  rightLegBend: {hipX:350,kneeX:870,kneeY:450,shoeY:1000,dx:56.6666666667,dy:155.625,grid:40},
+  // Restore only the original desk near this contact: tabletop/lip/underside.
+  // This follows the real sloped desk edge and never reaches the typing hands.
+  deskForeground: [645,445,920,445,957.5,525,957.5,625,895,635,850,597.5,645,540],
 };
